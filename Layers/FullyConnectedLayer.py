@@ -18,3 +18,12 @@ class FullyConnectedLayer(Layer):
         self.dbias = output_error
 
         return self.input_error
+    
+    def update(self, learning_rate):
+       
+        self.weights -= learning_rate * self.dweights
+        self.bias -= learning_rate * self.dbias
+        
+
+    def __repr__(self) -> str:
+        return "FullyConnectedLayer"
