@@ -1,4 +1,4 @@
-# Project Title
+# scratchTorch
 
 ## Table of Contents
 
@@ -9,38 +9,66 @@
 
 ## About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+scratchTorch is my personal project aimed at reimplementing PyTorch from scratch using Python. The goal is to gain a deep understanding of how deep learning frameworks work by building one myself. This project includes basic neural network components such as convolutional layers, pooling layers, and backpropagation mechanisms.
 
 ## Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+Follow these instructions to get a copy of scratchTorch up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them.
+You'll need the following software to run scratchTorch:
 
-```
-Give examples
+- Python 3.x
+- NumPy
+- SciPy
+
+To install the necessary packages, you can use pip:
+
+
+```bash
+pip install numpy scipy
 ```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
+To install simply clone the repository
 
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
+```bash
+git clone https://github.com/V1ncenttt/scratchTorch.git
+cd scratchTorch
 ```
 
-End with an example of getting some data out of the system or using it for a little demo.
+You can optionally use a virtual environment.
+
+```bash
+python -m venv venv
+source venv/bin/activate # On Windows, use `venv\Scripts\activate`
+```
 
 ## Usage <a name = "usage"></a>
 
-Add notes about how to use the system.
+To use scratchTorch, import the necessary modules and start building your neural network models. Here’s a basic example to demonstrate how to use the implemented layers:
+
+```python
+from Networks import NeuralNetwork
+from Layers import FullyConnectedLayer
+from ActivationFunctions import Tanh, ReLU
+from LossFunctions import MeanSquareError
+from Optimisers import MiniBatchGradientDescent, StochasticGradientDescent
+
+net = NeuralNetwork()
+
+net.add(FullyConnectedLayer(28 * 28, 100))  # input_shape=(1, 28*28)    ;   output_shape=(1100)
+net.add(Tanh())
+net.add(FullyConnectedLayer(100, 50))  # input_shape=(1, 100)      ;   output_shape=(1, 50)
+net.add(Tanh())
+net.add(FullyConnectedLayer(50, 10))  # input_shape=(1, 50)       ;   output_shape=(1, 10)
+net.add(Tanh())
+
+# train on 1000 samples
+net.use_loss(MeanSquareError())
+optimiser = StochasticGradientDescent(lr=0.1)
+net.fit(x_train[0:1000], y_train[0:1000], optimiser, epochs=100)
+
+```
