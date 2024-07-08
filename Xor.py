@@ -7,7 +7,7 @@ from ActivationFunctions import ReLU, Tanh
 from LossFunctions import MeanSquareError, CrossEntropy
 
 # training data
-x_train = np.array([[[0,0]], [[0,1]], [[1,0]], [[1,1]]])
+x_train = np.array([[[0, 0]], [[0, 1]], [[1, 0]], [[1, 1]]])
 y_train = np.array([[[0]], [[1]], [[1]], [[0]]])
 
 # network

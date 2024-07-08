@@ -1,6 +1,7 @@
 import numpy as np
 from LossFunctions import Loss
 
+
 class MeanSquareError(Loss):
     def __init__(self):
         pass
