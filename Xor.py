@@ -20,6 +20,8 @@ net.add(Tanh())
 optimiser = StochasticGradientDescent(lr=0.1)
 # train
 net.use_loss(CrossEntropy())
+print(net)
+exit()
 net.fit(x_train, y_train, optimiser, epochs=1000)
 
 # test

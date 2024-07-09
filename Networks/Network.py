@@ -1,6 +1,6 @@
 import numpy as np
 from Layers import Layer
-
+from tabulate import tabulate
 
 class NeuralNetwork:
 
@@ -53,18 +53,38 @@ class NeuralNetwork:
             print("epoch %d/%d   error=%f" % (i + 1, epochs, err))
 
     def __repr__(self) -> str:
-        representation = ""
+            headers = ["Layer", "Input Shape", "Output Shape", "Number of Parameters"]
+            table = []
+            total_params = 0
 
-        for layer in self.layers:
-            if hasattr(layer, "weights"):
-                representation += (
-                    str(layer)
-                    + " - Weights: "
-                    + str(layer.weights)
-                    + " - Bias: "
-                    + str(layer.bias)
-                    + "\n"
-                )
-            else:
-                representation += str(layer) + "\n"
-        return representation
+            for layer in self.layers:
+                layer_name = type(layer).__name__
+
+
+                if not getattr(layer, "input_shape", None) == None:
+                    input_shape = getattr(layer, "input_shape", None)
+                else:
+                    input_shape = output_shape
+
+                if not getattr(layer, "output_shape", None) == None:
+                    output_shape = getattr(layer, "output_shape", None)
+                else: 
+                    output_shape = input_shape
+
+                if hasattr(layer, "weights"):
+                    num_params = np.prod(layer.weights.shape)
+                    if hasattr(layer, "bias"):
+                        num_params += np.prod(layer.bias.shape)
+                    total_params += num_params
+                else:
+                    num_params = 0
+
+                table.append([layer_name, input_shape, output_shape, num_params])
+
+            representation = "=============================\n"
+            representation += "Neural Network (ScratchTorch)\n"
+            representation += "=============================\n"
+            representation += tabulate(table, headers, tablefmt="grid")
+            representation += f"\n\nTotal number of trainable parameters: {total_params}\n"
+            
+            return representation

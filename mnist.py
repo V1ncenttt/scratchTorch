@@ -48,6 +48,8 @@ net.add(Tanh())
 net.use_loss(MeanSquareError())
 optimiser = MiniBatchGradientDescent(lr=0.1, batch_size=32)
 optimiser = StochasticGradientDescent(lr=0.1)
+print(net)
+exit()
 net.fit(x_train[0:1000], y_train[0:1000], optimiser, epochs=100)
 
 # Calculate and print the test error

@@ -5,6 +5,8 @@ import scipy.signal as signal
 
 class Convolutional2DLayer(Layer):
     def __init__(self, kernel_size, input_depth, output_depth):
+        self.input_shape = (kernel_size[0], kernel_size[1], input_depth)
+        self.output_shape = (kernel_size[0], kernel_size[1], output_depth)
         self.input_depth = input_depth
         self.output_depth = output_depth
         self.kernel_size = kernel_size

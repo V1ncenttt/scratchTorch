@@ -6,6 +6,8 @@ class FullyConnectedLayer(Layer):
 
     def __init__(self, input_size, output_size) -> None:
         self.weights = np.random.rand(input_size, output_size) - 0.5
+        self.input_shape = input_size
+        self.output_shape = output_size
         self.bias = np.random.rand(1, output_size) - 0.5
 
     def forward(self, input_data):
