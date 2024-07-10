@@ -49,7 +49,7 @@ class AdamW(Optimiser):
             y_batch = y_train[start_idx:end_idx]
 
             batch_error = 0
-
+            outputs = []
             # Forward
             # TODO: process batch in one go?
             for i in range(len(x_batch)):
@@ -57,9 +57,46 @@ class AdamW(Optimiser):
 
                 for layer in self.model.layers:
                     output = self.layer.forward(output)
+
+                outputs.append(output)
                 batch_error += self.model.loss.forward(y_batch[i], output)
 
             err += batch_error
 
             # Backward
             # TODO: Continue
+
+            for i in range(len(x_batch)):
+                output = outputs[i]
+                error = self.model.loss.backward(y_batch[i], output)
+                for layer in reversed(self.model.layers):
+                    error = layer.backward(error)
+
+            # Update parameters
+            self.t +=1 # Time step
+            for idx, layer in enumerate(self.model.layers):
+                if hasattr(layer, 'weights'):
+                    g = layer.dweights
+                    self.m[idx] = self.beta1 * self.m[idx] + (1 - self.beta1) * g
+                    self.v[idx] = self.beta2 * self.v[idx] + (1 - self.beta2) * (g ** 2)
+
+                    m_hat = self.m[idx] / (1 - self.beta1 ** self.t)
+                    v_hat = self.v[idx] / (1 - self.beta2 ** self.t)
+
+                    layer.weights -= self.lr * m_hat / (np.sqrt(v_hat) + self.epsilon) + self.weight_decay * layer.weights
+
+                if hasattr(layer, 'bias'):
+                    gb = layer.dbias
+
+                    self.m[idx] = self.beta1 * self.m[idx] + (1 - self.beta1) * gb
+                    self.v[idx] = self.beta2 * self.v[idx] + (1 - self.beta2) * (gb ** 2)
+
+                    m_hat = self.m[idx] / (1 - self.beta1 ** self.t)
+                    v_hat = self.v[idx] / (1 - self.beta2 ** self.t)
+
+                    layer.weights -= self.lr * m_hat / (np.sqrt(v_hat) + self.epsilon) 
+        return err
+
+
+
+
